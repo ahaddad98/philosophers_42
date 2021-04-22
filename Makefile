@@ -9,7 +9,6 @@ OBJ_PATH1= ./philo_two/obj
 SRC_PATH2= ./philo_three/sources
 OBJ_PATH2= ./philo_three/obj
 HDR_PATH= includes
-# LIB_PATH= libft
 
 SRC_NAME=main.c\
 		
@@ -35,7 +34,7 @@ OBJ2= $(addprefix $(OBJ_PATH2)/,$(OBJ_NAME2))
 SRC2= $(addprefix $(SRC_PATH2)/,$(SRC_NAME2))
 HDR2= $(addprefix $(HDR_PATH)/,$(HDR_NAME))
 
-FLAGS= -Wall -Wextra -Werror
+# FLAGS= -Wall -Wextra -Werror
 H_FLAG= -I $(HDR_PATH)
 
 COMP= gcc

@@ -3,16 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/21 15:44:04 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/22 03:10:28 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosopher.h"
 
-int main()
+int main(int ac, char **av)
 {
-    puts("here is philo one");
+    int i;
+    int j;
+    t_phl phl;
+    if (ac == 6)
+    {
+        
+    }
+    return (0);
 }
