@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/22 16:07:55 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/22 16:36:40 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,12 @@
 
 typedef struct s_phl
 {
-    int     number_of_philosopher;
-    int     time_to_die;
-    int     time_to_eat;
-    int     time_to_sleep;
-    int     time_must_eat;
+    pthread_t   *philos;
+    int         number_of_philosopher;
+    int         time_to_die;
+    int         time_to_eat;
+    int         time_to_sleep;
+    int         time_must_eat;
 }           t_phl;
 
 int         check_args(char **av, int ac);
