@@ -11,6 +11,9 @@ OBJ_PATH2= ./philo_three/obj
 HDR_PATH= includes
 
 SRC_NAME=main.c\
+		tools3.c\
+		tools2.c\
+		tools1.c\
 		
 SRC_NAME1=main.c\
 
