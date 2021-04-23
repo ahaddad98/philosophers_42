@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/22 16:20:46 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/23 17:07:32 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,29 @@ void    get_args(char **av, t_phl *phl)
     }
 }
 
+void    print(t_phl *phl)
+{
+    printf("%d \n", phl->number_of_philosopher);
+    printf("%d \n", phl->time_to_die);
+    printf("%d \n", phl->time_to_eat);
+    printf("%d \n", phl->time_to_sleep);
+    printf("%d \n", phl->time_must_eat);
+}
+
+void    create_threads(t_phl *phl)
+{
+    
+}
+
 int main(int ac, char **av)
 {
     int i;
     int j;
     t_phl phl;
     
-    if (ac >= 5 && !check_args(av, ac))
+    if (ac >= 5 && !check_args(av, ac) && ac < 7)
     {
         get_args(av, &phl);
-        printf("%d \n", phl.number_of_philosopher);
-        printf("%d \n", phl.time_to_die);
-        printf("%d \n", phl.time_to_eat);
-        printf("%d \n", phl.time_to_sleep);
-        printf("%d \n", phl.time_must_eat);
     }
     else
         printf("ERROR IN PARAMETRES\n");

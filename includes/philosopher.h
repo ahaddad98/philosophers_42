@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/22 16:36:40 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/23 17:06:59 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,5 @@ typedef struct s_phl
 int         check_args(char **av, int ac);
 long long   ft_atoi_loong(char *str);
 int         ft_atoi(const char *str);
+
 #endif
