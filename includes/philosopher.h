@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/24 04:41:53 by amine            ###   ########.fr       */
+/*   Updated: 2021/04/24 16:29:04 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
 
@@ -26,6 +27,7 @@ typedef struct s_args
     int         time_to_eat;
     int         time_to_sleep;
     int         time_must_eat;
+    pthread_mutex_t *fork;
 }   t_args;
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/24 05:06:58 by amine            ###   ########.fr       */
+/*   Updated: 2021/04/24 16:40:30 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void    *action(void *phl)
     phl1 = (t_phl *)phl;
     while (1)
     {
-        puts("rani reaged");
-        break;
+        puts("rani ragued");
+        sleep(1);
     }
     return (NULL);
 }
@@ -58,6 +58,13 @@ void    init_thread(t_args *args, t_phl **phl)
     while (i < args->number_of_philosopher)
     {
         (*phl)[i].args = args;
+        i++;
+    }
+    i = 0;
+    while (i < args->number_of_philosopher)
+    {
+    puts("amine");
+        pthread_mutex_init((*phl)[i].args->fork, NULL);
         i++;
     }
 }
