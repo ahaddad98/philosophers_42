@@ -3,41 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/23 17:07:32 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/24 05:06:58 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosopher.h"
 
-void    get_args(char **av, t_phl *phl)
+void    get_args(char **av, t_args  *args)
 {
-    phl->time_must_eat = -1;
-    phl->number_of_philosopher = ft_atoi(av[1]);
-    phl->time_to_die = ft_atoi(av[2]);
-    phl->time_to_eat = ft_atoi(av[3]);
-    phl->time_to_sleep = ft_atoi(av[4]);
+    args->time_must_eat = -1;
+    args->number_of_philosopher = ft_atoi(av[1]);
+    args->time_to_die = ft_atoi(av[2]);
+    args->time_to_eat = ft_atoi(av[3]);
+    args->time_to_sleep = ft_atoi(av[4]);
     if(av[5])
     {
         puts("amine");
-        phl->time_must_eat = ft_atoi(av[5]);
+        args->time_must_eat = ft_atoi(av[5]);
     }
 }
 
-void    print(t_phl *phl)
+void    print(t_args *args)
 {
-    printf("%d \n", phl->number_of_philosopher);
-    printf("%d \n", phl->time_to_die);
-    printf("%d \n", phl->time_to_eat);
-    printf("%d \n", phl->time_to_sleep);
-    printf("%d \n", phl->time_must_eat);
+    printf("%d \n", args->number_of_philosopher);
+    printf("%d \n", args->time_to_die);
+    printf("%d \n", args->time_to_eat);
+    printf("%d \n", args->time_to_sleep);
+    printf("%d \n", args->time_must_eat);
 }
 
-void    create_threads(t_phl *phl)
+void    *action(void *phl)
 {
-    
+    t_phl *phl1;
+
+    phl1 = (t_phl *)phl;
+    while (1)
+    {
+        puts("rani reaged");
+        break;
+    }
+    return (NULL);
+}
+
+
+void    init_thread(t_args *args, t_phl **phl)
+{
+    int i;
+
+    i = 0;
+    *phl = malloc(sizeof(phl) * args->number_of_philosopher);
+    while (i < args->number_of_philosopher)
+    {
+        (*phl)[i].args = args;
+        i++;
+    }
+}
+
+void    create_threads(t_phl *phl, t_args *args)
+{
+    int i;
+
+    init_thread(args, &phl);
+    i = 0;
+    while (i < args->number_of_philosopher)
+    {
+        pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
+        i++;
+    }
+    i = 0;
+    while (i < args->number_of_philosopher)
+    {
+        pthread_join(phl[i].thrd, NULL);
+        i++;
+    }
 }
 
 int main(int ac, char **av)
@@ -45,10 +86,12 @@ int main(int ac, char **av)
     int i;
     int j;
     t_phl phl;
+    t_args args;
     
     if (ac >= 5 && !check_args(av, ac) && ac < 7)
     {
-        get_args(av, &phl);
+        get_args(av, &args);
+        create_threads(&phl, &args);
     }
     else
         printf("ERROR IN PARAMETRES\n");

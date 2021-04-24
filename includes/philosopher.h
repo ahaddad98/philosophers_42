@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/23 17:06:59 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/24 04:41:53 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,21 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef struct s_phl
+typedef struct s_args
 {
-    pthread_t   *philos;
     int         number_of_philosopher;
     int         time_to_die;
     int         time_to_eat;
     int         time_to_sleep;
     int         time_must_eat;
+}   t_args;
+
+
+typedef struct s_phl
+{
+    pthread_t		thrd;
+    t_args          *args;
+    int             num;
 }           t_phl;
 
 int         check_args(char **av, int ac);

@@ -46,13 +46,13 @@ all:  $(NAME) $(NAME1) $(NAME2)
 
 $(NAME) : $(LIB_PATH)/$(LIB) $(OBJ)
 		@rm -rf $(NAME)
-		@$(COMP) -g $(H_FLAG) $(OBJ) -o $@
+		@$(COMP) -g $(H_FLAG) $(OBJ) -lpthread -o $@
 $(NAME1) : $(LIB_PATH)/$(LIB) $(OBJ1)
 		@rm -rf $(NAME1)
-		@$(COMP) -g $(H_FLAG) $(OBJ1) -o $@
+		@$(COMP) -g $(H_FLAG) $(OBJ1)  -lpthread -o $@
 $(NAME2) : $(LIB_PATH)/$(LIB) $(OBJ2)
 		@rm -rf $(NAME2)
-		@$(COMP) -g $(H_FLAG) $(OBJ2) -o $@
+		@$(COMP) -g $(H_FLAG) $(OBJ2) -lpthread -o $@
 		@echo " Made by : \033[1;91mAhaddad\033[m"
 
 
