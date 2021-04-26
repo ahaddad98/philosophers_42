@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/24 16:40:30 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/26 04:23:42 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,20 @@ void    *action(void *phl)
         sleep(1);
     }
     return (NULL);
-}
+}     
 
+void    init_args(t_args *args, t_phl *phl)
+{
+    int i;
+    
+    i = 0;
+    args->fork = malloc(sizeof(pthread_mutex_t) * args->number_of_philosopher);
+    while (i < args->number_of_philosopher)
+    {
+        pthread_mutex_init(args->fork, NULL);
+        i++;
+    }
+}
 
 void    init_thread(t_args *args, t_phl **phl)
 {
@@ -60,14 +72,9 @@ void    init_thread(t_args *args, t_phl **phl)
         (*phl)[i].args = args;
         i++;
     }
-    i = 0;
-    while (i < args->number_of_philosopher)
-    {
-    puts("amine");
-        pthread_mutex_init((*phl)[i].args->fork, NULL);
-        i++;
-    }
 }
+
+
 
 void    create_threads(t_phl *phl, t_args *args)
 {
