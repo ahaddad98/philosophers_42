@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/26 04:23:42 by amine            ###   ########.fr       */
+/*   Updated: 2021/04/26 13:44:11 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ void    *action(void *phl)
     phl1 = (t_phl *)phl;
     while (1)
     {
-        puts("rani ragued");
-        sleep(1);
+        
     }
     return (NULL);
 }     
@@ -81,6 +80,7 @@ void    create_threads(t_phl *phl, t_args *args)
     int i;
 
     init_thread(args, &phl);
+    init_args(args, phl);
     i = 0;
     while (i < args->number_of_philosopher)
     {
