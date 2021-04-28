@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/25 02:58:51 by amine            ###   ########.fr       */
+/*   Updated: 2021/04/28 17:27:59 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 # include <pthread.h>
 # include <sys/time.h>
 
+# define EAT 1
+# define SLEEP 2
+# define THINK 3
+# define DEID 4
+ 
 typedef struct s_args
 {
     int         number_of_philosopher;
@@ -29,10 +34,10 @@ typedef struct s_args
     int         time_must_eat;
     int         check_if_dead;
     int			count_eat_all;
-	int			starting_time;
-    pthread_mutex_t *fork;
+	int			time_start;
+    pthread_mutex_t *fork; 
+    pthread_mutex_t mutex; 
 }   t_args;
-
 
 typedef struct s_phl
 {
@@ -43,6 +48,7 @@ typedef struct s_phl
 	int				left_fork;
 	int				right_fork;
 	int				eating_count;
+    struct timeval  current_time;
 }           t_phl;
 
 int         check_args(char **av, int ac);
