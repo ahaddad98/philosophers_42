@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/29 12:40:05 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/29 14:29:15 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,6 @@ void    create_threads(t_phl *phl, t_args *args)
 
     init_thread(args, &phl);
     init_args(args, phl);
-    // puts("amine");
-    // args->time_start = gettimeofday(&phl->current_time, NULL);
-    // printf("===>{%ld}", phl->current_time.tv_sec);
     i = 0;
     while (i < args->number_of_philosopher)
     {
@@ -109,14 +106,11 @@ void    get_fork(t_phl *phl)
     printf("phl : %d ; fork  : %d \n", phl->num , right);
     printf("phl : %d start eating\n", phl->num);
     usleep(phl->args->time_to_eat * 1000);
-    // printf("put forks \n");
     pthread_mutex_unlock(&phl->args->fork[phl->num]);
     pthread_mutex_unlock(&phl->args->fork[right]);
     printf("phl : %d start sleeping\n", phl->num);
     usleep(phl->args->time_to_sleep * 1000);
     printf("phl : %d start thinking\n", phl->num);
-
-    // time = gettimeofday(&phl->current_time, NULL) - phl->args->time_start;
 }
 
 void    start_eat(t_phl *phl)
