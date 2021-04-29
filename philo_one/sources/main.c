@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/28 17:33:19 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/04/29 12:40:05 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void    print(t_args *args)
     printf("%d \n", args->time_must_eat);
 }
 
-void    get_fork(t_phl *phl, int i);
+void    get_fork(t_phl *phl);
 
 void    *action(void *phl)
 {
@@ -43,15 +43,7 @@ void    *action(void *phl)
     
     while (1)
     {
-        get_fork(phl, i);
-        pthread_mutex_lock(&phl1->args->mutex);
-        i++;
-        if (i >= phl1->args->number_of_philosopher)
-            i = 0;
-        pthread_mutex_unlock(&phl1->args->mutex);
-        
-        // puts("amine haddad");
-        // sleep(1);
+        get_fork(phl);
     }
     return (NULL);
 }     
@@ -79,6 +71,7 @@ void    init_thread(t_args *args, t_phl **phl)
     while (i < args->number_of_philosopher)
     {
         (*phl)[i].args = args;
+        (*phl)[i].num = i;
         i++;
     }
 }
@@ -98,24 +91,31 @@ void    create_threads(t_phl *phl, t_args *args)
         pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
         pthread_detach(phl[i].thrd);
         i++;
+        usleep(100);
     }
     while (1);
 }
 
-void    get_fork(t_phl *phl, int i)
+void    get_fork(t_phl *phl)
 {
     int time = 0;
-    int right = (i + phl->args->number_of_philosopher - 1) % phl->args->number_of_philosopher;
+    int right = phl->num - 1;
 
-    pthread_mutex_lock(&phl->args->fork[i]);
-    printf("phl : %d ; fork  : %d \n", i , i);
+    if (right < 0)
+        right = phl->args->number_of_philosopher - 1;
     pthread_mutex_lock(&phl->args->fork[right]);
-    printf("phl : %d ; fork  : %d \n", i , right);
-    printf("phl : %d start eating\n", i);
+    printf("phl : %d ; fork  : %d \n", phl->num , phl->num);
+    pthread_mutex_lock(&phl->args->fork[phl->num]);
+    printf("phl : %d ; fork  : %d \n", phl->num , right);
+    printf("phl : %d start eating\n", phl->num);
     usleep(phl->args->time_to_eat * 1000);
-    printf("put forks \n");
+    // printf("put forks \n");
+    pthread_mutex_unlock(&phl->args->fork[phl->num]);
     pthread_mutex_unlock(&phl->args->fork[right]);
-    pthread_mutex_unlock(&phl->args->fork[i]);
+    printf("phl : %d start sleeping\n", phl->num);
+    usleep(phl->args->time_to_sleep * 1000);
+    printf("phl : %d start thinking\n", phl->num);
+
     // time = gettimeofday(&phl->current_time, NULL) - phl->args->time_start;
 }
 
