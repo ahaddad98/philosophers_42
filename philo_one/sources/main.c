@@ -6,7 +6,7 @@
 /*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/30 03:06:31 by amine            ###   ########.fr       */
+/*   Updated: 2021/04/30 03:58:11 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void    init_thread(t_args *args, t_phl **phl)
     int i;
 
     i = 0;
-    *phl = malloc(sizeof(phl) * args->number_of_philosopher);
+    printf("ha ra9m %d\n", args->number_of_philosopher);
+    *phl = malloc(sizeof(t_phl) * args->number_of_philosopher);
     while (i < args->number_of_philosopher)
     {
         (*phl)[i].args = args;
@@ -100,14 +101,18 @@ void    get_fork(t_phl *phl)
 
     if (right < 0)
         right = phl->args->number_of_philosopher - 1;
+    gettimeofday(&phl->start_time, NULL);
     pthread_mutex_lock(&phl->args->fork[right]);
     printf("phl : %d ; fork  : %d \n", phl->num , phl->num);
     pthread_mutex_lock(&phl->args->fork[phl->num]);
     printf("phl : %d ; fork  : %d \n", phl->num , right);
     printf("phl : %d start eating\n", phl->num);
     usleep(phl->args->time_to_eat * 1000);
+    gettimeofday(&phl->end_time, NULL);
     pthread_mutex_unlock(&phl->args->fork[phl->num]);
     pthread_mutex_unlock(&phl->args->fork[right]);
+    phl->args->time_count = (phl->end_time.tv_sec * 1000000 + phl->end_time.tv_usec) -(phl->start_time.tv_sec * 1000000 + phl->start_time.tv_usec);
+    printf("time count ===============> %d\n", phl->args->time_count);
     printf("phl : %d start sleeping\n", phl->num);
     usleep(phl->args->time_to_sleep * 1000);
     printf("phl : %d start thinking\n", phl->num);
