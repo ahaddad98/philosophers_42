@@ -6,24 +6,24 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/30 15:42:03 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/01 15:41:29 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosopher.h"
 
-void    get_args(char **av, t_args  *args)
+void get_args(char **av, t_args *args)
 {
     args->time_must_eat = -1;
     args->number_of_philosopher = ft_atoi(av[1]);
     args->time_to_die = ft_atoi(av[2]);
     args->time_to_eat = ft_atoi(av[3]);
     args->time_to_sleep = ft_atoi(av[4]);
-    if(av[5])
+    if (av[5])
         args->time_must_eat = ft_atoi(av[5]);
 }
 
-void    print(t_args *args)
+void print(t_args *args)
 {
     printf("%d \n", args->number_of_philosopher);
     printf("%d \n", args->time_to_die);
@@ -32,39 +32,55 @@ void    print(t_args *args)
     printf("%d \n", args->time_must_eat);
 }
 
-void    get_fork(t_phl *phl);
+void get_fork(t_phl *phl);
 
-void    *action(void *phl)
+void *check_die(void *data)
 {
-    t_phl *phl1;
+    t_phl *phl;
+    int time_count;
 
-    phl1 = (t_phl *)phl;
-    int i = 0;
-
+    phl = (t_phl *)data;
     while (1)
     {
-        gettimeofday(&phl1->start_time, NULL);
-        get_fork(phl);
-        phl1->args->time_count = 0;
-        gettimeofday(&phl1->end_time, NULL);
-        phl1->args->time_count = ((phl1->end_time.tv_sec * 1000) + (phl1->end_time.tv_usec/ 1000)) - ((phl1->start_time.tv_sec * 1000) + (phl1->start_time.tv_usec / 1000));
-        if (phl1->args->time_count <= phl1->args->time_to_die)
+        pthread_mutex_lock(&phl->mutex);
+        time_count = 0;
+        gettimeofday(&phl->end_time, NULL);
+        time_count = ((phl->end_time.tv_sec * 1000) + (phl->end_time.tv_usec / 1000)) - ((phl->start_time.tv_sec * 1000) + (phl->start_time.tv_usec / 1000));
+        if (time_count > phl->args->time_to_die)
         {
-            printf("the phl : %d was dead\n", phl1->num);
-            exit(1);
+            pthread_mutex_lock(&phl->args->print);
+            printf("the phl : %d was dead\n", phl->num);
+            exit(1) ;
         }
-        // printf("time count ===============> %d\n", phl1->args->time_count);
+        pthread_mutex_unlock(&phl->mutex);
+        usleep(1000);
     }
     return (NULL);
-}     
+}
 
-void    init_args(t_args *args, t_phl *phl)
+void *action(void *data)
+{
+    t_phl *phl;
+
+    phl = (t_phl *)data;
+    int i = 0;
+    gettimeofday(&phl->start_time, NULL);
+    pthread_create(&phl->thrd, NULL, &check_die, phl);
+    pthread_detach(phl->thrd);
+    while (1)
+    {
+        get_fork(phl);
+    }
+    return (NULL);
+}
+
+void init_args(t_args *args, t_phl *phl)
 {
     int i;
-    
+
     i = 0;
     args->fork = malloc(sizeof(pthread_mutex_t) * args->number_of_philosopher);
-    pthread_mutex_init(&args->mutex, NULL);
+    pthread_mutex_init(&args->print, NULL);
     while (i < args->number_of_philosopher)
     {
         pthread_mutex_init(&args->fork[i], NULL);
@@ -72,7 +88,7 @@ void    init_args(t_args *args, t_phl *phl)
     }
 }
 
-void    init_thread(t_args *args, t_phl **phl)
+void init_thread(t_args *args, t_phl **phl)
 {
     int i;
 
@@ -82,11 +98,12 @@ void    init_thread(t_args *args, t_phl **phl)
     {
         (*phl)[i].args = args;
         (*phl)[i].num = i;
+        pthread_mutex_init(&(*phl)[i].mutex, NULL);
         i++;
     }
 }
 
-void    create_threads(t_phl *phl, t_args *args)
+void create_threads(t_phl *phl, t_args *args)
 {
     int i;
 
@@ -100,47 +117,58 @@ void    create_threads(t_phl *phl, t_args *args)
         i++;
         usleep(100);
     }
-    while (1);
+    while (1)
+        ;
 }
 
-void    get_fork(t_phl *phl)
+void get_fork(t_phl *phl)
 {
     int time = 0;
     int right = phl->num - 1;
 
     if (right < 0)
         right = phl->args->number_of_philosopher - 1;
+    // printf("{%d %d}\n", phl->num, right);
     pthread_mutex_lock(&phl->args->fork[right]);
-    printf("phl : %d ; fork  : %d \n", phl->num , phl->num);
+    pthread_mutex_lock(&phl->args->print);
+    printf("phl : %d ; fork  : %d \n", phl->num, phl->num);
+    pthread_mutex_unlock(&phl->args->print);
     pthread_mutex_lock(&phl->args->fork[phl->num]);
-    printf("phl : %d ; fork  : %d \n", phl->num , right);
+    pthread_mutex_lock(&phl->args->print);
+    printf("phl : %d ; fork  : %d \n", phl->num, right);
+    pthread_mutex_unlock(&phl->args->print);
+    pthread_mutex_lock(&phl->mutex);
+    pthread_mutex_lock(&phl->args->print);
     printf("phl : %d start eating\n", phl->num);
+    pthread_mutex_unlock(&phl->args->print);
+    gettimeofday(&phl->start_time, NULL);
     usleep(phl->args->time_to_eat * 1000);
-    pthread_mutex_unlock(&phl->args->fork[phl->num]);
+    pthread_mutex_unlock(&phl->mutex);
     pthread_mutex_unlock(&phl->args->fork[right]);
+    pthread_mutex_unlock(&phl->args->fork[phl->num]);
+    pthread_mutex_lock(&phl->args->print);
     printf("phl : %d start sleeping\n", phl->num);
+    pthread_mutex_unlock(&phl->args->print);
     usleep(phl->args->time_to_sleep * 1000);
+    pthread_mutex_lock(&phl->args->print);
     printf("phl : %d start thinking\n", phl->num);
+    pthread_mutex_unlock(&phl->args->print);
 }
 
-void    start_eat(t_phl *phl)
+void start_eat(t_phl *phl)
 {
-    
 }
 
-void    gts(t_phl *phl)
+void gts(t_phl *phl)
 {
-    
 }
 
-void    time_to_thinhk(t_phl *phl)
+void time_to_thinhk(t_phl *phl)
 {
-    
 }
 
-void    time_to_die(t_phl *phl)
+void time_to_die(t_phl *phl)
 {
-    
 }
 
 int main(int ac, char **av)
@@ -149,7 +177,7 @@ int main(int ac, char **av)
     int j;
     t_phl phl;
     t_args args;
-    
+
     if (ac >= 5 && !check_args(av, ac) && ac < 7)
     {
         get_args(av, &args);
