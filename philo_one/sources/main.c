@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/02 03:40:31 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/02 14:58:12 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void *check_die(void *data)
         if (time_count > phl->args->time_to_die)
         {
             pthread_mutex_lock(&phl->args->print);
-            printf("the phl : %d was dead\n", phl->num);
+            printf("the phl : %d died\n", phl->num);
             exit(1) ;
         }
         pthread_mutex_unlock(&phl->mutex);
@@ -121,6 +121,7 @@ void create_threads(t_phl *phl, t_args *args)
 }
 
 void start_eat(t_phl *phl, int right);
+void    print_action(t_phl *phl, int action);
 
 void get_fork(t_phl *phl)
 {
@@ -130,43 +131,33 @@ void get_fork(t_phl *phl)
     if (right < 0)
         right = phl->args->number_of_philosopher - 1;
     start_eat(phl, right);
-    pthread_mutex_lock(&phl->args->print);
-    printf("phl : %d start sleeping\n", phl->num);
-    pthread_mutex_unlock(&phl->args->print);
+    print_action(phl, 3);
     usleep(phl->args->time_to_sleep * 1000);
-    pthread_mutex_lock(&phl->args->print);
-    printf("phl : %d start thinking\n", phl->num);
-    pthread_mutex_unlock(&phl->args->print);
+    print_action(phl, 4);
 }
 
-void    print_action(t_phl *phl, int right, int action)
+void    print_action(t_phl *phl, int action)
 {
-    // thread_mutex_lock(&phl->args->print);
-    // if (action == 1)
-    //     printf("phl : %d ; fork  : %d \n", phl->num, phl->num);
-    // if (action == 1)
-    //     printf("phl : %d ; fork  : %d \n", phl->num, phl->num);
-    // if (action == 1)
-    //     printf("phl : %d ; fork  : %d \n", phl->num, phl->num);
-    // if (action == 1)
-    //     printf("phl : %d ; fork  : %d \n", phl->num, phl->num);
-    // pthread_mutex_unlock(&phl->args->print);
+    pthread_mutex_lock(&phl->args->print);
+    if (action == 1)
+        printf("phl : %d ;  has taken a fork\n", phl->num);
+    if (action == 2)
+        printf("phl : %d ;  is eating \n", phl->num);
+    if (action == 3)
+        printf("phl : %d ; is sleeping \n", phl->num);
+    if (action == 4)
+        printf("phl : %d ; is thinking\n", phl->num);
+    pthread_mutex_unlock(&phl->args->print);
 }
 
 void start_eat(t_phl *phl, int right)
 {
     pthread_mutex_lock(&phl->args->fork[right]);
-    pthread_mutex_lock(&phl->args->print);
-    printf("phl : %d ; fork  : %d \n", phl->num, phl->num);
-    pthread_mutex_unlock(&phl->args->print);
+    print_action(phl, 1);
     pthread_mutex_lock(&phl->args->fork[phl->num]);
-    pthread_mutex_lock(&phl->args->print);
-    printf("phl : %d ; fork  : %d \n", phl->num, right);
-    pthread_mutex_unlock(&phl->args->print);
+    print_action(phl, 1);
     pthread_mutex_lock(&phl->mutex);
-    pthread_mutex_lock(&phl->args->print);
-    printf("phl : %d start eating\n", phl->num);
-    pthread_mutex_unlock(&phl->args->print);
+    print_action(phl, 2);
     gettimeofday(&phl->start_time, NULL);
     usleep(phl->args->time_to_eat * 1000);
     pthread_mutex_unlock(&phl->mutex);
