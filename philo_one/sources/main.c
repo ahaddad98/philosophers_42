@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/02 14:58:12 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/02 17:50:43 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void *check_die(void *data)
 {
     t_phl *phl;
     int time_count;
-
     phl = (t_phl *)data;
+    
     while (1)
     {
         pthread_mutex_lock(&phl->mutex);
@@ -110,6 +110,7 @@ void create_threads(t_phl *phl, t_args *args)
     init_thread(args, &phl);
     init_args(args, phl);
     i = 0;
+    gettimeofday(&args->time_to_print, NULL);
     while (i < args->number_of_philosopher)
     {
         pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
@@ -138,15 +139,20 @@ void get_fork(t_phl *phl)
 
 void    print_action(t_phl *phl, int action)
 {
+    struct timeval time_print;
+    unsigned int    time = 0;
+
+     time = ((phl->args->time_to_print.tv_sec * 1000) + (phl->args->time_to_print.tv_usec / 1000)) - ((time_print.tv_sec * 1000) + (time_print.tv_usec / 1000));
+    gettimeofday(&time_print, NULL);
     pthread_mutex_lock(&phl->args->print);
     if (action == 1)
-        printf("phl : %d ;  has taken a fork\n", phl->num);
+        printf("%u ==> phl : %d ;  has taken a fork\n",time, phl->num);
     if (action == 2)
-        printf("phl : %d ;  is eating \n", phl->num);
+        printf("%u ==>phl : %d ;  is eating \n", time,phl->num);
     if (action == 3)
-        printf("phl : %d ; is sleeping \n", phl->num);
+        printf("%u ==>phl : %d ; is sleeping \n",time ,phl->num);
     if (action == 4)
-        printf("phl : %d ; is thinking\n", phl->num);
+        printf("%u ==>phl : %d ; is thinking\n", time ,phl->num);
     pthread_mutex_unlock(&phl->args->print);
 }
 

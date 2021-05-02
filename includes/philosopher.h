@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/01 15:29:42 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/02 17:41:58 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_args
     int			count_eat_all;
 	int			time_start;
 	int			time_count;
-
+    struct timeval time_to_print;
     pthread_mutex_t *fork; 
     pthread_mutex_t print; 
 }   t_args;
