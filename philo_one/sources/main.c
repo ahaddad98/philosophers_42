@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/02 17:50:43 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/03 04:01:36 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void print(t_args *args)
     printf("%d \n", args->time_to_die);
     printf("%d \n", args->time_to_eat);
     printf("%d \n", args->time_to_sleep);
-    printf("%d \n", args->time_must_eat);
 }
 
 void get_fork(t_phl *phl);
@@ -58,6 +57,19 @@ void *check_die(void *data)
     return (NULL);
 }
 
+// int    check_count_eat(t_phl *phl)
+// {
+//     int i;
+
+//     i = 0;
+//     while (i < phl->args->number_of_philosopher)
+//     {
+//         if (phl[i]->)
+//         i++;
+//     }
+//     return (1);
+// }
+
 void *action(void *data)
 {
     t_phl *phl;
@@ -69,7 +81,8 @@ void *action(void *data)
     pthread_detach(phl->thrd);
     while (1)
     {
-        get_fork(phl);
+        // if (phl->args->eating_count < phl->args->time_must_eat)
+            get_fork(phl);
     }
     return (NULL);
 }
@@ -98,6 +111,7 @@ void init_thread(t_args *args, t_phl **phl)
     {
         (*phl)[i].args = args;
         (*phl)[i].num = i;
+        (*phl)[i].args->eating_count = 0;
         pthread_mutex_init(&(*phl)[i].mutex, NULL);
         i++;
     }
@@ -142,13 +156,15 @@ void    print_action(t_phl *phl, int action)
     struct timeval time_print;
     unsigned int    time = 0;
 
-     time = ((phl->args->time_to_print.tv_sec * 1000) + (phl->args->time_to_print.tv_usec / 1000)) - ((time_print.tv_sec * 1000) + (time_print.tv_usec / 1000));
     gettimeofday(&time_print, NULL);
+    time = ((time_print.tv_sec * 1000) + (time_print.tv_usec / 1000)) - ((phl->args->time_to_print.tv_sec * 1000) + (phl->args->time_to_print.tv_usec / 1000));
     pthread_mutex_lock(&phl->args->print);
     if (action == 1)
         printf("%u ==> phl : %d ;  has taken a fork\n",time, phl->num);
     if (action == 2)
+    {
         printf("%u ==>phl : %d ;  is eating \n", time,phl->num);
+    }
     if (action == 3)
         printf("%u ==>phl : %d ; is sleeping \n",time ,phl->num);
     if (action == 4)
@@ -158,6 +174,9 @@ void    print_action(t_phl *phl, int action)
 
 void start_eat(t_phl *phl, int right)
 {
+        // printf("{%d}\n", phl->args->eating_count);
+    if (phl->args->eating_count < phl->args->time_must_eat)
+        phl->args->eating_count++;
     pthread_mutex_lock(&phl->args->fork[right]);
     print_action(phl, 1);
     pthread_mutex_lock(&phl->args->fork[phl->num]);
