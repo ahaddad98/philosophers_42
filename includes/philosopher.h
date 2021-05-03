@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/03 03:47:02 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/03 14:50:56 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,12 @@ typedef struct s_args
     struct timeval time_to_print;
     pthread_mutex_t *fork; 
     pthread_mutex_t print; 
-	int				eating_count;
+	int				eating_count1;
 }   t_args;
 
 typedef struct s_phl
 {
+	int			    *eating_count;
     pthread_mutex_t mutex;
     pthread_t		thrd;
     t_args          *args;
