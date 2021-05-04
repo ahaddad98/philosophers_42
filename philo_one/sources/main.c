@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/04 03:16:19 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/04 16:54:20 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void init_args(t_args *args, t_phl *phl)
     i = 0;
     args->fork = malloc(sizeof(pthread_mutex_t) * args->number_of_philosopher);
     pthread_mutex_init(&args->print, NULL);
+    pthread_mutex_init(&phl->mutex1, NULL);
+    pthread_mutex_init(&phl->mutex2, NULL);
     while (i < args->number_of_philosopher)
     {
         pthread_mutex_init(&args->fork[i], NULL);
@@ -44,11 +46,12 @@ void init_thread(t_args *args, t_phl **phl)
 void create_threads(t_phl *phl, t_args *args)
 {
     int i;
+    int k = 1;
 
     init_thread(args, &phl);
     init_args(args, phl);
     i = 0;
-    int k = 1;
+    pthread_mutex_lock(&phl->mutex1);
     phl->eating_count = malloc(sizeof(int) * (phl->args->number_of_philosopher));
     while (i < phl->args->number_of_philosopher)
     {
@@ -69,7 +72,8 @@ void create_threads(t_phl *phl, t_args *args)
         i++;
         usleep(100);
     }
-    while (1);
+    pthread_mutex_lock(&phl->mutex1);
+    // while (1);
 }
 
 int main(int ac, char **av)

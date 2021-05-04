@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/04 03:15:14 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/04 16:45:50 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_phl
 {
 	int			    *eating_count;
     pthread_mutex_t mutex;
+    pthread_mutex_t mutex1;
+    pthread_mutex_t mutex2;
     pthread_t		thrd;
     t_args          *args;
     int             go_to;
