@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 16:04:41 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/04/22 16:05:06 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/04 03:07:17 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,15 @@ int check_args(char **av, int ac)
         i++;
     }
     return (0);
+}
+
+void get_args(char **av, t_args *args)
+{
+    args->time_must_eat = -1;
+    args->number_of_philosopher = ft_atoi(av[1]);
+    args->time_to_die = ft_atoi(av[2]);
+    args->time_to_eat = ft_atoi(av[3]);
+    args->time_to_sleep = ft_atoi(av[4]);
+    if (av[5])
+        args->time_must_eat = ft_atoi(av[5]);
 }

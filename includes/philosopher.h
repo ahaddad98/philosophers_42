@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/03 14:50:56 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/04 03:15:14 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,10 @@ typedef struct s_phl
 int         check_args(char **av, int ac);
 long long   ft_atoi_loong(char *str);
 int         ft_atoi(const char *str);
-
+void start_eat(t_phl *phl, int right);
+void get_fork(t_phl *phl);
+void print_action(t_phl *phl, int action);
+void get_args(char **av, t_args *args);
+int check_num_must_eat(t_phl *phl);
+void *action(void *data);
 #endif

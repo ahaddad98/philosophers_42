@@ -14,6 +14,8 @@ SRC_NAME=main.c\
 		tools3.c\
 		tools2.c\
 		tools1.c\
+		action.c\
+		print.c\
 		
 SRC_NAME1=main.c\
 
