@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/05 02:23:03 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/05 15:45:53 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void init_args(t_args *args, t_phl *phl)
     i = 0;
     args->fork = malloc(sizeof(pthread_mutex_t) * args->number_of_philosopher);
     pthread_mutex_init(&args->print, NULL);
+    pthread_mutex_init(&args->die, NULL);
+    pthread_mutex_init(&args->ss, NULL);
     pthread_mutex_init(&phl->mutex1, NULL);
     pthread_mutex_init(&phl->mutex2, NULL);
     while (i < args->number_of_philosopher)
@@ -51,7 +53,7 @@ void create_threads(t_phl *phl, t_args *args)
     init_thread(args, &phl);
     init_args(args, phl);
     i = 0;
-    pthread_mutex_lock(&phl->mutex1);
+    pthread_mutex_lock(&phl->args->ss);
     phl->eating_count = malloc(sizeof(int) * (phl->args->number_of_philosopher));
     while (i < phl->args->number_of_philosopher)
     {
@@ -72,7 +74,7 @@ void create_threads(t_phl *phl, t_args *args)
         i++;
         usleep(100);
     }
-    pthread_mutex_lock(&phl->mutex1);
+    pthread_mutex_lock(&phl->args->ss);
     // while (1);
 }
 
@@ -91,6 +93,6 @@ int main(int ac, char **av)
     else
         printf("ERROR IN PARAMETRES\n");
     // pthread_mutex_lock(&phl.mutex1);
-        // printf("amine rani wssalte hna");
+    // printf("amine rani wssalte hna");
     return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/05 02:57:03 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/05 15:48:13 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,6 @@ void print_action(t_phl *phl, int action)
         printf("%u ==>phl : %d ; is sleeping \n", time, phl->num);
     if (action == 4)
         printf("%u ==>phl : %d ; is thinking\n", time, phl->num);
-    if (action == 5)
-    {
-        // pthread_mutex_lock(&phl->mutex2);
-        // usleep(100);
-        // pthread_mutex_unlock(&phl->mutex2);
-        printf("DONE\n");
-        pthread_mutex_unlock(&phl->mutex1);
-        // exit(0);
-    }
     pthread_mutex_unlock(&phl->args->print);
 }
 
@@ -70,9 +61,10 @@ void *check_die(void *data)
         time_count = ((phl->end_time.tv_sec * 1000) + (phl->end_time.tv_usec / 1000)) - ((phl->start_time.tv_sec * 1000) + (phl->start_time.tv_usec / 1000));
         if (time_count > phl->args->time_to_die)
         {
+            pthread_mutex_lock(&phl->args->die);
             pthread_mutex_lock(&phl->args->print);
+            pthread_mutex_unlock(&phl->args->ss);
             printf("the phl : %d died\n", phl->num);
-            exit(1);
         }
         pthread_mutex_unlock(&phl->mutex);
         usleep(1000);
@@ -80,17 +72,19 @@ void *check_die(void *data)
     return (NULL);
 }
 
-void    *amine(char *msg, t_phl *phl)
+void *amine(char *msg, t_phl *phl)
 {
+    pthread_mutex_lock(&phl->args->die);
     printf("amine haddad gooo\n");
-    pthread_mutex_unlock(&phl->args->print);
-    pthread_mutex_unlock(&phl->mutex1);
+    // pthread_mutex_lock(&phl->args->print);
+    pthread_mutex_unlock(&phl->args->ss);
     return (NULL);
 }
 
 void *action(void *data)
 {
     t_phl *phl;
+    int k;
     pthread_mutex_t test;
 
     phl = (t_phl *)data;
@@ -101,21 +95,11 @@ void *action(void *data)
     pthread_detach(phl->thrd);
     while (1)
     {
-        // if (check_num_must_eat(phl))
-        // {
-        //     print_action(phl, 5);
-        //     // pthread_mutex_lock(&phl->args->print);
-        //     // return (amine(NULL, phl));
-        //     // printf("amine DONE\n");
-        //     // pthread_mutex_unlock(&phl->args->print);
-        //     // break ;
-        //     // pthread_mutex_unlock(&phl->mutex1);
-        //     // return (NULL);
-        //     exit(0);
-        // }
-        // else
-            get_fork(phl);
+        k = get_fork(phl);
+        if (k == 2)
+            break;
+        if (k == 1)
+            return (amine(NULL, phl));
     }
-    // printf("amine haddad\n");
     return (NULL);
 }
