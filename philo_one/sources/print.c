@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/04 17:08:29 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/05 02:57:03 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,16 @@ void print_action(t_phl *phl, int action)
         printf("%u ==>phl : %d ; is sleeping \n", time, phl->num);
     if (action == 4)
         printf("%u ==>phl : %d ; is thinking\n", time, phl->num);
-    pthread_mutex_unlock(&phl->args->print);
     if (action == 5)
     {
         // pthread_mutex_lock(&phl->mutex2);
-        printf("DONE\n");
+        // usleep(100);
         // pthread_mutex_unlock(&phl->mutex2);
+        printf("DONE\n");
         pthread_mutex_unlock(&phl->mutex1);
         // exit(0);
     }
+    pthread_mutex_unlock(&phl->args->print);
 }
 
 int check_num_must_eat(t_phl *phl)
@@ -79,27 +80,42 @@ void *check_die(void *data)
     return (NULL);
 }
 
+void    *amine(char *msg, t_phl *phl)
+{
+    printf("amine haddad gooo\n");
+    pthread_mutex_unlock(&phl->args->print);
+    pthread_mutex_unlock(&phl->mutex1);
+    return (NULL);
+}
+
 void *action(void *data)
 {
     t_phl *phl;
+    pthread_mutex_t test;
 
     phl = (t_phl *)data;
     int i = 0;
     gettimeofday(&phl->start_time, NULL);
+    pthread_mutex_init(&test, NULL);
     pthread_create(&phl->thrd, NULL, &check_die, phl);
     pthread_detach(phl->thrd);
     while (1)
     {
-        if (!check_num_must_eat(phl))
+        // if (check_num_must_eat(phl))
+        // {
+        //     print_action(phl, 5);
+        //     // pthread_mutex_lock(&phl->args->print);
+        //     // return (amine(NULL, phl));
+        //     // printf("amine DONE\n");
+        //     // pthread_mutex_unlock(&phl->args->print);
+        //     // break ;
+        //     // pthread_mutex_unlock(&phl->mutex1);
+        //     // return (NULL);
+        //     exit(0);
+        // }
+        // else
             get_fork(phl);
-        else
-        {
-            // printf("amine DONE\n");
-            // pthread_mutex_unlock(&phl->mutex1);
-            print_action(phl, 5);
-            // break;
-            // exit(0);
-        }
     }
+    // printf("amine haddad\n");
     return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/04 16:54:20 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/05 02:23:03 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,7 @@ int main(int ac, char **av)
     }
     else
         printf("ERROR IN PARAMETRES\n");
+    // pthread_mutex_lock(&phl.mutex1);
+        // printf("amine rani wssalte hna");
     return (0);
 }
