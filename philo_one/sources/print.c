@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/05 15:48:13 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/05 17:22:26 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void *amine(char *msg, t_phl *phl)
     // pthread_mutex_lock(&phl->args->print);
     pthread_mutex_unlock(&phl->args->ss);
     return (NULL);
-}
+}     
 
 void *action(void *data)
 {
