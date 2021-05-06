@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/06 04:33:10 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/06 15:49:20 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void init_args(t_args *args, t_phl *phl)
     pthread_mutex_init(&args->die, NULL);
     pthread_mutex_init(&args->ss, NULL);
     pthread_mutex_init(&phl->mutex1, NULL);
-    pthread_mutex_init(&phl->mutex2, NULL);
     while (i < args->number_of_philosopher)
     {
         pthread_mutex_init(&args->fork[i], NULL);
@@ -50,9 +49,9 @@ void create_threads(t_phl *phl, t_args *args)
     int i;
     int k = 1;
 
+    i = 0;
     init_thread(args, &phl);
     init_args(args, phl);
-    i = 0;
     pthread_mutex_lock(&phl->args->ss);
     phl->eating_count = malloc(sizeof(int) * (phl->args->number_of_philosopher));
     while (i < phl->args->number_of_philosopher)
@@ -81,10 +80,14 @@ void    ft_free(t_phl *phl, t_args *args)
 {
     int i;
 
+    pthread_mutex_destroy(&args->print);
+    pthread_mutex_destroy(&args->die);
+    pthread_mutex_destroy(&args->ss);
     i = 0;
+    free(args->fork);
     while (i < args->number_of_philosopher)
     {
-        pthread_mutex_destroy(phl[0].args->fork);
+        pthread_mutex_destroy(&args->fork[i]);
         i++;
     }
 }
@@ -100,9 +103,9 @@ int main(int ac, char **av)
     {
         get_args(av, &args);
         create_threads(&phl, &args);
+        ft_free(&phl, &args);
     }
     else
         printf("ERROR IN PARAMETRES\n");
-    ft_free(&phl, &args);
     return (0);
 }
