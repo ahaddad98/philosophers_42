@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/05 17:22:26 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/06 03:52:31 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,16 @@ void *action(void *data)
     pthread_detach(phl->thrd);
     while (1)
     {
-        k = get_fork(phl);
-        if (k == 2)
-            break;
-        if (k == 1)
-            return (amine(NULL, phl));
+        if (phl->args->time_must_eat != -1)
+        {
+            k = get_fork(phl);
+            if (k == 2)
+                break;
+            if (k == 1)
+                return (amine(NULL, phl));
+        }
+        else
+            get_fork(phl);
     }
     return (NULL);
 }
