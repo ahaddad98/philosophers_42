@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/05 15:45:53 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/06 04:33:10 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,18 @@ void create_threads(t_phl *phl, t_args *args)
         usleep(100);
     }
     pthread_mutex_lock(&phl->args->ss);
-    // while (1);
+}
+
+void    ft_free(t_phl *phl, t_args *args)
+{
+    int i;
+
+    i = 0;
+    while (i < args->number_of_philosopher)
+    {
+        pthread_mutex_destroy(phl[0].args->fork);
+        i++;
+    }
 }
 
 int main(int ac, char **av)
@@ -92,7 +103,6 @@ int main(int ac, char **av)
     }
     else
         printf("ERROR IN PARAMETRES\n");
-    // pthread_mutex_lock(&phl.mutex1);
-    // printf("amine rani wssalte hna");
+    ft_free(&phl, &args);
     return (0);
 }

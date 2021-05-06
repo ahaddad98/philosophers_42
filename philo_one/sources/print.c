@@ -6,7 +6,7 @@
 /*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/06 03:52:31 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/06 04:28:25 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void *check_die(void *data)
 void *amine(char *msg, t_phl *phl)
 {
     pthread_mutex_lock(&phl->args->die);
-    printf("amine haddad gooo\n");
+    printf("DONE\n");
     // pthread_mutex_lock(&phl->args->print);
     pthread_mutex_unlock(&phl->args->ss);
     return (NULL);
