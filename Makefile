@@ -18,8 +18,18 @@ SRC_NAME=main.c\
 		print.c\
 		
 SRC_NAME1=main.c\
+		tools3.c\
+		tools2.c\
+		tools1.c\
+		action.c\
+		print.c\
 
 SRC_NAME2=main.c\
+		tools3.c\
+		tools2.c\
+		tools1.c\
+		action.c\
+		print.c\
 
 HDR_NAME=philosopher.h
 
