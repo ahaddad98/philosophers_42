@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/06 17:19:30 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/07 17:49:41 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_action(t_phl *phl, int action)
 	time = ((time_print.tv_sec * 1000) + (time_print.tv_usec / 1000))
 		- ((phl->args->time_to_print.tv_sec * 1000)
 			+ (phl->args->time_to_print.tv_usec / 1000));
-	pthread_mutex_lock(&phl->args->print);
+	sem_wait(phl->args->print_sem);
 	if (action == 1)
 		printf("%u ==> phl : %d ;  has taken a fork\n", time, phl->num);
 	if (action == 2)
@@ -59,7 +59,7 @@ void	*check_die(void *data)
 	phl = (t_phl *)data;
 	while (1)
 	{
-		pthread_mutex_lock(&phl->mutex);
+		sem_wait(phl->mutex_sem);
 		t_c = 0;
 		gettimeofday(&phl->end_time, NULL);
 		t_c = ((phl->end_time.tv_sec * 1000) + (phl->end_time.tv_usec / 1000))
@@ -67,8 +67,8 @@ void	*check_die(void *data)
 				+ (phl->start_time.tv_usec / 1000));
 		if (t_c > phl->args->time_to_die)
 		{
-			pthread_mutex_lock(&phl->args->die);
-			pthread_mutex_lock(&phl->args->print);
+			sem_wait(phl->args->die_sem);
+			sem_wait(phl->args->print_sem);
 			pthread_mutex_unlock(&phl->args->ss);
 			printf("the phl : %d died\n", phl->num);
 		}
@@ -80,7 +80,7 @@ void	*check_die(void *data)
 
 void	*amine(char *msg, t_phl *phl)
 {
-	pthread_mutex_lock(&phl->args->die);
+	sem_wait(phl->args->die_sem);
 	printf("DONE\n");
 	pthread_mutex_unlock(&phl->args->ss);
 	return (NULL);
@@ -90,11 +90,9 @@ void	*action(void *data)
 {
 	t_phl				*phl;
 	int					k;
-	pthread_mutex_t		test;
 
 	phl = (t_phl *)data;
 	gettimeofday(&phl->start_time, NULL);
-	pthread_mutex_init(&test, NULL);
 	pthread_create(&phl->thrd, NULL, &check_die, phl);
 	pthread_detach(phl->thrd);
 	while (1)
