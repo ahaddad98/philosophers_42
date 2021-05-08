@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 17:23:08 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 17:32:45 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct  s_phl
     pthread_mutex_t mutex1;
     sem_t           *mutex1_sem;
     pthread_t       thrd;
+    pthread_t       must_eat;
     t_args          *args;
     int             num;
     pid_t           pid;

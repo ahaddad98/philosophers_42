@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/08 17:25:28 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 17:56:21 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,19 @@ void	*amine(char *msg, t_phl *phl)
 	return (NULL);
 }
 
+void	*check_must_eat(void *data)
+{
+	t_phl		*phl;
+
+	phl = (t_phl *)data;
+	if (check_num_must_eat(phl))
+	{
+		puts("amine haddad rah khedama");
+		exit(0);
+	}
+	return (NULL);
+}
+
 void	*action_philo_3(t_phl *phl)
 {
 	int					k;
@@ -93,15 +106,17 @@ void	*action_philo_3(t_phl *phl)
 	gettimeofday(&phl->start_time, NULL);
 	pthread_create(&phl->thrd, NULL, &check_die, phl);
 	pthread_detach(phl->thrd);
+	pthread_create(&phl->must_eat, NULL, &check_must_eat, phl);
+	pthread_detach(phl->must_eat);
 	while (1)
 	{
 		if (phl->args->time_must_eat != -1)
 		{
 			k = get_fork(phl);
-			if (k == 2)
-				break ;
-			if (k == 1)
-				return (amine(NULL, phl));
+			// if (k == 2)
+			// 	break ;
+			// if (k == 1)
+			// 	return (amine(NULL, phl));
 		}
 		else
 			get_fork(phl);

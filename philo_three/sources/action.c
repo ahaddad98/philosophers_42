@@ -6,11 +6,17 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 02:57:45 by amine             #+#    #+#             */
-/*   Updated: 2021/05/08 16:16:45 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 17:38:24 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosopher.h"
+
+void	ft_exit(t_phl *phl)
+{
+	sem_post(phl->args->ss_sem);
+	exit(0);
+}
 
 int	start_eat(t_phl *phl, int right)
 {
@@ -23,7 +29,7 @@ int	start_eat(t_phl *phl, int right)
 	gettimeofday(&phl->start_time, NULL);
 	usleep(phl->args->time_to_eat * 1000);
 	if (check_num_must_eat(phl) && (phl->args->time_must_eat != -1))
-		return (1);
+		ft_exit(phl);
 	sem_post(phl->mutex_sem);
 	sem_post(phl->args->fork_sem);
 	sem_post(phl->args->fork_sem);
