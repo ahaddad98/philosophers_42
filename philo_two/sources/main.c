@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 03:28:32 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/08 15:29:22 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,48 @@ void	init_args(t_args *args, t_phl *phl)
 	int		i;
 
 	i = 0;
-	phl->fork_sem = sem_open("/file", O_CREAT | O_EXCL, 0777, phl->args->number_of_philosopher);
-	phl->args->die_sem = sem_open("/file", O_CREAT | O_EXCL, 0777, phl->args->number_of_philosopher);
-	phl->args->print_sem = sem_open("/file", O_CREAT | O_EXCL, 0777 , phl->args->number_of_philosopher);
+	sem_unlink("/file1");
+	sem_unlink("/file2");
+	sem_unlink("/file3");
+	// sem_unlink("/file5");
+	phl->args->fork_sem = sem_open("/file1", O_CREAT , 0777, phl->args->number_of_philosopher);
+	phl->args->die_sem = sem_open("/file2", O_CREAT , 0777, 1);
+	phl->args->print_sem = sem_open("/file3", O_CREAT , 0777 , 1);
+	// phl->mutex_sem = sem_open("/file5", O_CREAT , 0777 , 1);
 	
+}
+
+char	*ft_itoa(int n)
+{
+	char	*ptr;
+	long	nbr;
+	int		len;
+
+	len = 1;
+	nbr = n;
+	while (nbr > 9)
+	{
+		nbr /= 10;
+		len++;
+	}
+	ptr = (char *)malloc(sizeof(char) * (len + 1));
+	if (!ptr)
+		return (NULL);
+	ptr[len] = '\0';
+	nbr = n;
+	while (nbr > 9)
+	{
+		ptr[--len] = (nbr % 10) + '0';
+		nbr /= 10;
+	}
+	ptr[--len] = nbr + '0';
+	return (ptr);
 }
 
 void	init_thread(t_args *args, t_phl **phl)
 {
 	int		i;
+	char    *name;
 
 	i = 0;
 	*phl = malloc(sizeof(t_phl) * args->number_of_philosopher);
@@ -33,7 +66,9 @@ void	init_thread(t_args *args, t_phl **phl)
 	{
 		(*phl)[i].args = args;
 		(*phl)[i].num = i;
-		// (*phl)[i].mutex_sem = sem_open("file", O_CREAT, S_IRWXU, args->number_of_philosopher);
+		name = ft_itoa(i + 1);
+		sem_unlink(name);
+		(*phl)[i].mutex_sem = sem_open(name, O_CREAT , 0777 , 1);
 		i++;
 	}
 }
@@ -47,29 +82,27 @@ void	create_threads(t_phl *phl, t_args *args)
 	i = -1;
 	init_thread(args, &phl);
 	init_args(args, phl);
-	if ((phl->args->ss_sem = sem_open("/file1", O_CREAT | O_EXCL, 0777, phl->args->number_of_philosopher)) == SEM_FAILED)
+	sem_unlink("/file4");
+	if ((phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1)) == SEM_FAILED)
 	{
 		printf("sir asate  12 12\n");
 		return ;
 	}
 	if (sem_wait(phl->args->ss_sem))
 		printf("sir asate \n");
-	// else
-		// printf("amine hyaffdaf \n");
-	// phl->eating_count = malloc(sizeof(int)
-	// 		* (phl->args->number_of_philosopher));
-	// while (++i < phl->args->number_of_philosopher)
-	// 	phl->eating_count[i] = 0;
-	// while (++k < phl->args->number_of_philosopher)
-	// 	phl[k].eating_count = phl[0].eating_count;
+	phl->eating_count = malloc(sizeof(int) * (phl->args->number_of_philosopher));
+	while (++i < phl->args->number_of_philosopher)
+		phl->eating_count[i] = 0;
+	while (++k < phl->args->number_of_philosopher)
+	phl[k].eating_count = phl[0].eating_count;
 	i = 0;
-	// gettimeofday(&args->time_to_print, NULL);
+	gettimeofday(&args->time_to_print, NULL);
 	while (i < args->number_of_philosopher)
 	{
 		pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
 		pthread_detach(phl[i].thrd);
 		i++;
-		usleep(100);
+		usleep(1000);
 	}
 	sem_wait(phl->args->ss_sem);
 }
@@ -97,7 +130,6 @@ int	main(int ac, char **av)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
-		// ft_free(&phl, &args);
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");

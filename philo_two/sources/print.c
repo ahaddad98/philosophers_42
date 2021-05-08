@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/08 03:04:18 by amine            ###   ########.fr       */
+/*   Updated: 2021/05/08 15:37:59 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	print_action(t_phl *phl, int action)
 	if (action == 4)
 		printf("%u ==>phl : %d ; is thinking\n", time, phl->num);
 	sem_post(phl->args->print_sem);
+	// puts("amine haddad");
 }
 
 int	check_num_must_eat(t_phl *phl)
@@ -56,25 +57,25 @@ void	*check_die(void *data)
 	t_phl	*phl;
 	int		t_c;
 
-	// phl = (t_phl *)data;
-	// while (1)
-	// {
-	// 	sem_wait(phl->mutex_sem);
-	// 	t_c = 0;
-	// 	gettimeofday(&phl->end_time, NULL);
-	// 	t_c = ((phl->end_time.tv_sec * 1000) + (phl->end_time.tv_usec / 1000))
-	// 		- ((phl->start_time.tv_sec * 1000)
-	// 			+ (phl->start_time.tv_usec / 1000));
-	// 	if (t_c > phl->args->time_to_die)
-	// 	{
-	// 		// sem_wait(phl->args->die_sem);
-	// 		// sem_wait(phl->args->print_sem);
-	// 		// sem_post(phl->args->ss_sem);
-	// 		printf("the phl : %d died\n", phl->num);
-	// 	}
-	// 	sem_post(phl->mutex_sem);
-	// 	usleep(1000);
-	// }
+	phl = (t_phl *)data;
+	while (1)
+	{
+		sem_wait(phl->mutex_sem);
+		t_c = 0;
+		gettimeofday(&phl->end_time, NULL);
+		t_c = ((phl->end_time.tv_sec * 1000) + (phl->end_time.tv_usec / 1000))
+			- ((phl->start_time.tv_sec * 1000)
+				+ (phl->start_time.tv_usec / 1000));
+		if (t_c > phl->args->time_to_die)
+		{
+			sem_wait(phl->args->die_sem);
+			sem_wait(phl->args->print_sem);
+			sem_post(phl->args->ss_sem);
+			printf("the phl : %d died\n", phl->num);
+		}
+		sem_post(phl->mutex_sem);
+		usleep(1000);
+	}
 	return (NULL);
 }
 
@@ -93,20 +94,21 @@ void	*action(void *data)
 
 	phl = (t_phl *)data;
 	gettimeofday(&phl->start_time, NULL);
-	// pthread_create(&phl->thrd, NULL, &check_die, phl);
-	// pthread_detach(phl->thrd);
+	pthread_create(&phl->thrd, NULL, &check_die, phl);
+	pthread_detach(phl->thrd);
 	while (1)
 	{
-		// if (phl->args->time_must_eat != -1)
-		// {
-		// 	k = get_fork(phl);
-		// 	if (k == 2)
-		// 		break ;
-		// 	if (k == 1)
-		// 		return (amine(NULL, phl));
-		// }
-		// else
+		if (phl->args->time_must_eat != -1)
+		{
+			k = get_fork(phl);
+			if (k == 2)
+				break ;
+			if (k == 1)
+				return (amine(NULL, phl));
+		}
+		else
 			get_fork(phl);
+		usleep(1000);
 	}
 	return (NULL);
 }
