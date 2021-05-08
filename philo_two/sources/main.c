@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 16:20:51 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 16:35:42 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,42 +20,16 @@ void	init_args(t_args *args, t_phl *phl)
 	sem_unlink("/file1");
 	sem_unlink("/file2");
 	sem_unlink("/file3");
-	phl->args->fork_sem = sem_open("/file1", O_CREAT , 0777, phl->args->number_of_philosopher);
-	phl->args->die_sem = sem_open("/file2", O_CREAT , 0777, 1);
-	phl->args->print_sem = sem_open("/file3", O_CREAT , 0777 , 1);
-}
-
-char	*ft_itoa(int n)
-{
-	char	*ptr;
-	long	nbr;
-	int		len;
-
-	len = 1;
-	nbr = n;
-	while (nbr > 9)
-	{
-		nbr /= 10;
-		len++;
-	}
-	ptr = (char *)malloc(sizeof(char) * (len + 1));
-	if (!ptr)
-		return (NULL);
-	ptr[len] = '\0';
-	nbr = n;
-	while (nbr > 9)
-	{
-		ptr[--len] = (nbr % 10) + '0';
-		nbr /= 10;
-	}
-	ptr[--len] = nbr + '0';
-	return (ptr);
+	phl->args->fork_sem = sem_open("/file1", O_CREAT, 0777,
+			phl->args->number_of_philosopher);
+	phl->args->die_sem = sem_open("/file2", O_CREAT, 0777, 1);
+	phl->args->print_sem = sem_open("/file3", O_CREAT, 0777, 1);
 }
 
 void	init_thread(t_args *args, t_phl **phl)
 {
 	int		i;
-	char    *name;
+	char	*name;
 
 	i = 0;
 	*phl = malloc(sizeof(t_phl) * args->number_of_philosopher);
@@ -65,7 +39,7 @@ void	init_thread(t_args *args, t_phl **phl)
 		(*phl)[i].num = i;
 		name = ft_itoa(i + 1);
 		sem_unlink(name);
-		(*phl)[i].mutex_sem = sem_open(name, O_CREAT , 0777 , 1);
+		(*phl)[i].mutex_sem = sem_open(name, O_CREAT, 0777, 1);
 		i++;
 		free(name);
 		name = NULL;
@@ -75,32 +49,27 @@ void	init_thread(t_args *args, t_phl **phl)
 void	create_threads(t_phl *phl, t_args *args)
 {
 	int		i;
-	int		k;
 
-	k = 0;
 	i = -1;
 	init_thread(args, &phl);
 	init_args(args, phl);
 	sem_unlink("/file4");
-	if ((phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1)) == SEM_FAILED)
-	{
-		printf("error in sem_epen\n");
-		return ;
-	}
+	phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1);
 	if (sem_wait(phl->args->ss_sem))
 		printf("error in sem_wait \n");
-	phl->eating_count = malloc(sizeof(int) * (phl->args->number_of_philosopher));
+	phl->eating_count = malloc(sizeof(int)
+			* (phl->args->number_of_philosopher));
 	while (++i < phl->args->number_of_philosopher)
 		phl->eating_count[i] = 0;
-	while (++k < phl->args->number_of_philosopher)
-	phl[k].eating_count = phl[0].eating_count;
 	i = 0;
+	while (++i < phl->args->number_of_philosopher)
+		phl[i].eating_count = phl[0].eating_count;
+	i = -1;
 	gettimeofday(&args->time_to_print, NULL);
-	while (i < args->number_of_philosopher)
+	while (++i < args->number_of_philosopher)
 	{
 		pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
 		pthread_detach(phl[i].thrd);
-		i++;
 		usleep(100);
 	}
 	sem_wait(phl->args->ss_sem);

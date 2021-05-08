@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 15:13:09 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 16:32:03 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ void            print_action(t_phl *phl, int action);
 void            get_args(char **av, t_args *args);
 int             check_num_must_eat(t_phl *phl);
 void            *action(void *data);
+char    		*ft_itoa(int n);
 
 #endif
