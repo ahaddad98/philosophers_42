@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 15:29:22 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 16:20:51 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,9 @@ void	init_args(t_args *args, t_phl *phl)
 	sem_unlink("/file1");
 	sem_unlink("/file2");
 	sem_unlink("/file3");
-	// sem_unlink("/file5");
 	phl->args->fork_sem = sem_open("/file1", O_CREAT , 0777, phl->args->number_of_philosopher);
 	phl->args->die_sem = sem_open("/file2", O_CREAT , 0777, 1);
 	phl->args->print_sem = sem_open("/file3", O_CREAT , 0777 , 1);
-	// phl->mutex_sem = sem_open("/file5", O_CREAT , 0777 , 1);
-	
 }
 
 char	*ft_itoa(int n)
@@ -70,6 +67,8 @@ void	init_thread(t_args *args, t_phl **phl)
 		sem_unlink(name);
 		(*phl)[i].mutex_sem = sem_open(name, O_CREAT , 0777 , 1);
 		i++;
+		free(name);
+		name = NULL;
 	}
 }
 
@@ -85,11 +84,11 @@ void	create_threads(t_phl *phl, t_args *args)
 	sem_unlink("/file4");
 	if ((phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1)) == SEM_FAILED)
 	{
-		printf("sir asate  12 12\n");
+		printf("error in sem_epen\n");
 		return ;
 	}
 	if (sem_wait(phl->args->ss_sem))
-		printf("sir asate \n");
+		printf("error in sem_wait \n");
 	phl->eating_count = malloc(sizeof(int) * (phl->args->number_of_philosopher));
 	while (++i < phl->args->number_of_philosopher)
 		phl->eating_count[i] = 0;
@@ -102,7 +101,7 @@ void	create_threads(t_phl *phl, t_args *args)
 		pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
 		pthread_detach(phl[i].thrd);
 		i++;
-		usleep(1000);
+		usleep(100);
 	}
 	sem_wait(phl->args->ss_sem);
 }
@@ -113,10 +112,10 @@ void	ft_free(t_phl *phl, t_args *args)
 
 	i = 0;
 	free(args->fork);
-	while (i < args->number_of_philosopher)
-	{
-		i++;
-	}
+	sem_close(phl->args->fork_sem);
+	sem_close(phl->args->die_sem);
+	sem_close(phl->args->print_sem);
+	sem_close(phl->args->ss_sem);
 }
 
 int	main(int ac, char **av)

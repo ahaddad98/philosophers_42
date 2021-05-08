@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/08 15:37:59 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 16:20:41 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	print_action(t_phl *phl, int action)
 	if (action == 4)
 		printf("%u ==>phl : %d ; is thinking\n", time, phl->num);
 	sem_post(phl->args->print_sem);
-	// puts("amine haddad");
 }
 
 int	check_num_must_eat(t_phl *phl)
