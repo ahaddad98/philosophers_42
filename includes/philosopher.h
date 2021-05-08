@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/07 17:41:21 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 03:15:11 by amine            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,17 @@ typedef struct s_args
     int             time_to_eat;
     int             time_to_sleep;
     int             time_must_eat;
-    int             check_if_dead;
     int             count_eat_all;
     int             time_start;
     int             time_count;
     struct timeval  time_to_print;
     pthread_mutex_t *fork;
     pthread_mutex_t print;
-    sem_t *print_sem;
+    sem_t           *print_sem;
     pthread_mutex_t die;
-    sem_t *die_sem;
+    sem_t           *die_sem;
     pthread_mutex_t ss;
-    sem_t *ss_sem;
-    int             eating_count1;
+    sem_t           *ss_sem;
 }               t_args;
 
 typedef struct  s_phl
@@ -53,15 +51,12 @@ typedef struct  s_phl
     sem_t           *fork_sem;
     int             *eating_count;
     pthread_mutex_t mutex;
-    sem_t *mutex_sem;
+    sem_t           *mutex_sem;
     pthread_mutex_t mutex1;
-    sem_t *mutex1_sem;
+    sem_t           *mutex1_sem;
     pthread_t       thrd;
     t_args          *args;
-    int             go_to;
     int             num;
-    int             left_fork;
-    int             right_fork;
     struct timeval  current_time;
     struct timeval  start_time;
     struct timeval  end_time;
