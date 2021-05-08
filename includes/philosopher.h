@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 16:32:03 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 17:23:08 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct  s_phl
     pthread_t       thrd;
     t_args          *args;
     int             num;
+    pid_t           pid;
     struct timeval  current_time;
     struct timeval  start_time;
     struct timeval  end_time;
@@ -71,6 +72,7 @@ int             get_fork(t_phl *phl);
 void            print_action(t_phl *phl, int action);
 void            get_args(char **av, t_args *args);
 int             check_num_must_eat(t_phl *phl);
+void            *action_philo_3(t_phl *data);
 void            *action(void *data);
 char    		*ft_itoa(int n);
 

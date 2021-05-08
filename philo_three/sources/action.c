@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 02:57:45 by amine             #+#    #+#             */
-/*   Updated: 2021/05/06 17:07:35 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 16:16:45 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 int	start_eat(t_phl *phl, int right)
 {
-	pthread_mutex_lock(&phl->args->fork[right]);
+	sem_wait(phl->args->fork_sem);
 	print_action(phl, 1);
-	pthread_mutex_lock(&phl->args->fork[phl->num]);
+	sem_wait(phl->args->fork_sem);
 	print_action(phl, 1);
-	pthread_mutex_lock(&phl->mutex);
+	sem_wait(phl->mutex_sem);
 	print_action(phl, 2);
 	gettimeofday(&phl->start_time, NULL);
 	usleep(phl->args->time_to_eat * 1000);
 	if (check_num_must_eat(phl) && (phl->args->time_must_eat != -1))
 		return (1);
-	pthread_mutex_unlock(&phl->mutex);
-	pthread_mutex_unlock(&phl->args->fork[right]);
-	pthread_mutex_unlock(&phl->args->fork[phl->num]);
+	sem_post(phl->mutex_sem);
+	sem_post(phl->args->fork_sem);
+	sem_post(phl->args->fork_sem);
 	if (phl[0].eating_count[phl->num] == phl->args->time_must_eat)
 	{
 		return (2);

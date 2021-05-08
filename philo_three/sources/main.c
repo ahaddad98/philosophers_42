@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/06 17:26:44 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 17:26:00 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,19 @@ void	init_args(t_args *args, t_phl *phl)
 	int		i;
 
 	i = 0;
-	args->fork = malloc(sizeof(pthread_mutex_t) * args->number_of_philosopher);
-	pthread_mutex_init(&args->print, NULL);
-	pthread_mutex_init(&args->die, NULL);
-	pthread_mutex_init(&args->ss, NULL);
-	pthread_mutex_init(&phl->mutex1, NULL);
-	while (i < args->number_of_philosopher)
-	{
-		pthread_mutex_init(&args->fork[i], NULL);
-		i++;
-	}
+	sem_unlink("/file1");
+	sem_unlink("/file2");
+	sem_unlink("/file3");
+	phl->args->fork_sem = sem_open("/file1", O_CREAT, 0777,
+			phl->args->number_of_philosopher);
+	phl->args->die_sem = sem_open("/file2", O_CREAT, 0777, 1);
+	phl->args->print_sem = sem_open("/file3", O_CREAT, 0777, 1);
 }
 
 void	init_thread(t_args *args, t_phl **phl)
 {
 	int		i;
+	char	*name;
 
 	i = 0;
 	*phl = malloc(sizeof(t_phl) * args->number_of_philosopher);
@@ -39,53 +37,58 @@ void	init_thread(t_args *args, t_phl **phl)
 	{
 		(*phl)[i].args = args;
 		(*phl)[i].num = i;
-		pthread_mutex_init(&(*phl)[i].mutex, NULL);
+		name = ft_itoa(i + 1);
+		sem_unlink(name);
+		(*phl)[i].mutex_sem = sem_open(name, O_CREAT, 0777, 1);
 		i++;
+		free(name);
+		name = NULL;
 	}
 }
 
 void	create_threads(t_phl *phl, t_args *args)
 {
 	int		i;
-	int		k;
 
-	k = 0;
 	i = -1;
 	init_thread(args, &phl);
 	init_args(args, phl);
-	pthread_mutex_lock(&phl->args->ss);
+	sem_unlink("/file4");
+	phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1);
+	if (sem_wait(phl->args->ss_sem))
+		printf("error in sem_wait \n");
 	phl->eating_count = malloc(sizeof(int)
 			* (phl->args->number_of_philosopher));
 	while (++i < phl->args->number_of_philosopher)
 		phl->eating_count[i] = 0;
-	while (++k < phl->args->number_of_philosopher)
-		phl[k].eating_count = phl[0].eating_count;
 	i = 0;
+	while (++i < phl->args->number_of_philosopher)
+		phl[i].eating_count = phl[0].eating_count;
+	i = -1;
 	gettimeofday(&args->time_to_print, NULL);
-	while (i < args->number_of_philosopher)
+	while (++i < args->number_of_philosopher)
 	{
-		pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
-		pthread_detach(phl[i].thrd);
-		i++;
+		phl[i].pid = fork();
+		if (phl[i].pid == 0)
+		{
+			action_philo_3(&phl[i]);
+			exit(0);
+		}
 		usleep(100);
 	}
-	pthread_mutex_lock(&phl->args->ss);
+	sem_wait(phl->args->ss_sem);
 }
 
 void	ft_free(t_phl *phl, t_args *args)
 {
 	int		i;
 
-	pthread_mutex_destroy(&args->print);
-	pthread_mutex_destroy(&args->die);
-	pthread_mutex_destroy(&args->ss);
 	i = 0;
 	free(args->fork);
-	while (i < args->number_of_philosopher)
-	{
-		pthread_mutex_destroy(&args->fork[i]);
-		i++;
-	}
+	sem_close(phl->args->fork_sem);
+	sem_close(phl->args->die_sem);
+	sem_close(phl->args->print_sem);
+	sem_close(phl->args->ss_sem);
 }
 
 int	main(int ac, char **av)
@@ -99,7 +102,6 @@ int	main(int ac, char **av)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
-		ft_free(&phl, &args);
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");

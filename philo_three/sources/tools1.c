@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 03:12:43 by amine             #+#    #+#             */
-/*   Updated: 2021/05/06 17:20:18 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/08 16:52:09 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,31 @@ int	count_line(char **env)
 	while (env[i])
 		i++;
 	return (i);
+}
+
+char	*ft_itoa(int n)
+{
+	char		*ptr;
+	long		nbr;
+	int			len;
+
+	len = 1;
+	nbr = n;
+	while (nbr > 9)
+	{
+		nbr /= 10;
+		len++;
+	}
+	ptr = (char *)malloc(sizeof(char) * (len + 1));
+	if (!ptr)
+		return (NULL);
+	ptr[len] = '\0';
+	nbr = n;
+	while (nbr > 9)
+	{
+		ptr[--len] = (nbr % 10) + '0';
+		nbr /= 10;
+	}
+	ptr[--len] = nbr + '0';
+	return (ptr);
 }
