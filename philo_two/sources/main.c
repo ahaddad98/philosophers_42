@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 16:35:42 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 16:54:45 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,15 @@ void	init_args(t_args *args, t_phl *phl)
 	phl->args->print_sem = sem_open("/file3", O_CREAT, 0777, 1);
 }
 
-void	init_thread(t_args *args, t_phl **phl)
+int	init_thread(t_args *args, t_phl **phl)
 {
 	int		i;
 	char	*name;
 
 	i = 0;
 	*phl = malloc(sizeof(t_phl) * args->number_of_philosopher);
+	if (!(*phl))
+		return (0);
 	while (i < args->number_of_philosopher)
 	{
 		(*phl)[i].args = args;
@@ -44,6 +46,7 @@ void	init_thread(t_args *args, t_phl **phl)
 		free(name);
 		name = NULL;
 	}
+	return (1);
 }
 
 void	create_threads(t_phl *phl, t_args *args)
@@ -51,7 +54,8 @@ void	create_threads(t_phl *phl, t_args *args)
 	int		i;
 
 	i = -1;
-	init_thread(args, &phl);
+	if (!(init_thread(args, &phl)))
+		return ;
 	init_args(args, phl);
 	sem_unlink("/file4");
 	phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1);
@@ -65,13 +69,9 @@ void	create_threads(t_phl *phl, t_args *args)
 	while (++i < phl->args->number_of_philosopher)
 		phl[i].eating_count = phl[0].eating_count;
 	i = -1;
-	gettimeofday(&args->time_to_print, NULL);
-	while (++i < args->number_of_philosopher)
-	{
-		pthread_create(&phl[i].thrd, NULL, &action, &phl[i]);
-		pthread_detach(phl[i].thrd);
-		usleep(100);
-	}
+	if (gettimeofday(&args->time_to_print, NULL) == -1)
+		return ;
+	cree_thread(phl, args);
 	sem_wait(phl->args->ss_sem);
 }
 
@@ -81,10 +81,10 @@ void	ft_free(t_phl *phl, t_args *args)
 
 	i = 0;
 	free(args->fork);
-	sem_close(phl->args->fork_sem);
-	sem_close(phl->args->die_sem);
-	sem_close(phl->args->print_sem);
-	sem_close(phl->args->ss_sem);
+	sem_unlink("/file1");
+	sem_unlink("/file2");
+	sem_unlink("/file3");
+	sem_unlink("/file4");
 }
 
 int	main(int ac, char **av)
@@ -98,6 +98,7 @@ int	main(int ac, char **av)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
+		ft_free(&phl, &args);
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");

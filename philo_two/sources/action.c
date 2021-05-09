@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 02:57:45 by amine             #+#    #+#             */
-/*   Updated: 2021/05/08 16:16:45 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 16:57:15 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,19 @@ int	get_fork(t_phl *phl)
 	usleep(phl->args->time_to_sleep * 1000);
 	print_action(phl, 4);
 	return (0);
+}
+
+void	cree_thread(t_phl *phl, t_args *args)
+{
+	int	i;
+
+	i = -1;
+	while (++i < args->number_of_philosopher)
+	{
+		if (pthread_create(&phl[i].thrd, NULL, &action, &phl[i]))
+			return ;
+		if (pthread_detach(phl[i].thrd))
+			return ;
+		usleep(100);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/08 16:36:19 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 16:56:21 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,10 @@ void	*action(void *data)
 
 	phl = (t_phl *)data;
 	gettimeofday(&phl->start_time, NULL);
-	pthread_create(&phl->thrd, NULL, &check_die, phl);
-	pthread_detach(phl->thrd);
+	if (pthread_create(&phl->thrd, NULL, &check_die, phl))
+		return (NULL);
+	if (pthread_detach(phl->thrd))
+		return (NULL);
 	while (1)
 	{
 		if (phl->args->time_must_eat != -1)
