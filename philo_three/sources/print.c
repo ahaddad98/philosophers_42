@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/09 14:45:08 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:23:38 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,10 @@ void	*action_philo_3(t_phl *phl)
 
 	k = 0;
 	gettimeofday(&phl->start_time, NULL);
-	pthread_create(&phl->thrd, NULL, &check_die, phl);
-	pthread_detach(phl->thrd);
+	if (pthread_create(&phl->thrd, NULL, &check_die, phl))
+		return (NULL);
+	if (pthread_detach(phl->thrd))
+		return (NULL);
 	while (1)
 	{
 		get_fork(phl);

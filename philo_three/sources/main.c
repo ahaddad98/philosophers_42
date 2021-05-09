@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 15:21:14 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:28:16 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	create_process(t_phl *phl, t_args *args)
 	while (++i < args->number_of_philosopher)
 	{
 		phl[i].pid = fork();
+		if (phl[i].pid == -1)
+			return ;
 		if (phl[i].pid == 0)
 		{
 			phl->index = 0;
@@ -76,16 +78,16 @@ void	create_threads(t_phl *phl, t_args *args)
 	sem_wait(phl->args->ss_sem);
 }
 
-void	ft_free(t_phl *phl, t_args *args)
+void	ft_free(t_phl *phl)
 {
 	int		i;
 
 	i = 0;
-	free(args->fork);
-	sem_close(phl->args->fork_sem);
-	sem_close(phl->args->die_sem);
-	sem_close(phl->args->print_sem);
-	sem_close(phl->args->ss_sem);
+	sem_unlink("/file1");
+	sem_unlink("/file2");
+	sem_unlink("/file4");
+	sem_unlink("/file3");
+	sem_unlink("/file6");
 }
 
 int	main(int ac, char **av)
@@ -99,6 +101,7 @@ int	main(int ac, char **av)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
+		ft_free(&phl);
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");
