@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 15:14:58 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 16:31:17 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,7 @@ void			*action(void *data);
 char			*ft_itoa(int n);
 void			*check_count_eat(void *data);
 void			init_args(t_args *args, t_phl *phl);
+int				init_args1(t_args *args, t_phl *phl);
+void			cree_thread(t_phl *phl, t_args *args);
 
 #endif

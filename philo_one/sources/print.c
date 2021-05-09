@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/06 17:19:30 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 16:35:01 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ void	*action(void *data)
 {
 	t_phl				*phl;
 	int					k;
-	pthread_mutex_t		test;
 
 	phl = (t_phl *)data;
 	gettimeofday(&phl->start_time, NULL);
-	pthread_mutex_init(&test, NULL);
-	pthread_create(&phl->thrd, NULL, &check_die, phl);
-	pthread_detach(phl->thrd);
+	if (pthread_create(&phl->thrd, NULL, &check_die, phl))
+		return (NULL);
+	if (pthread_detach(phl->thrd))
+		return (NULL);
 	while (1)
 	{
 		if (phl->args->time_must_eat != -1)

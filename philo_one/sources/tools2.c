@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 03:46:24 by amine             #+#    #+#             */
-/*   Updated: 2021/05/06 17:21:51 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 16:40:23 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,20 @@ long long	ft_atoi_loong(char *str)
 		i++;
 	}
 	return (ret * sign);
+}
+
+void	cree_thread(t_phl *phl, t_args *args)
+{
+	int		i;
+
+	i = 0;
+	while (i < args->number_of_philosopher)
+	{
+		if (pthread_create(&phl[i].thrd, NULL, &action, &phl[i]))
+			return ;
+		if (pthread_detach(phl[i].thrd))
+			return ;
+		i++;
+		usleep(100);
+	}
 }
