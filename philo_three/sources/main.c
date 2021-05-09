@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 17:26:00 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 14:50:00 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ void	init_args(t_args *args, t_phl *phl)
 	sem_unlink("/file1");
 	sem_unlink("/file2");
 	sem_unlink("/file3");
+	sem_unlink("/file6");
 	phl->args->fork_sem = sem_open("/file1", O_CREAT, 0777,
 			phl->args->number_of_philosopher);
 	phl->args->die_sem = sem_open("/file2", O_CREAT, 0777, 1);
 	phl->args->print_sem = sem_open("/file3", O_CREAT, 0777, 1);
+	phl->args->sem = sem_open("/file6", O_CREAT, 0777, 0);
 }
 
 void	init_thread(t_args *args, t_phl **phl)
@@ -46,6 +48,28 @@ void	init_thread(t_args *args, t_phl **phl)
 	}
 }
 
+void	*check_count_eat(void *data)
+{
+	t_phl		*phl;
+	int			i;
+
+	i = 0;	
+	phl = (t_phl *)data;
+	while (1)
+	{
+		sem_wait(phl->args->sem);
+		i++;
+		if (i == phl->args->time_must_eat)
+		{
+			sem_wait(phl->args->print_sem);
+			printf("DONE\n");
+			sem_post(phl->args->ss_sem);
+			break ;
+		}
+	}
+	return (NULL);
+}
+
 void	create_threads(t_phl *phl, t_args *args)
 {
 	int		i;
@@ -65,12 +89,15 @@ void	create_threads(t_phl *phl, t_args *args)
 	while (++i < phl->args->number_of_philosopher)
 		phl[i].eating_count = phl[0].eating_count;
 	i = -1;
+	pthread_create(&phl->thrd1, NULL,check_count_eat,phl);
+	pthread_detach(phl->thrd1);
 	gettimeofday(&args->time_to_print, NULL);
 	while (++i < args->number_of_philosopher)
 	{
 		phl[i].pid = fork();
 		if (phl[i].pid == 0)
 		{
+			phl->index = 0;
 			action_philo_3(&phl[i]);
 			exit(0);
 		}

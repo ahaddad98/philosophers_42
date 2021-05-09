@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/08 17:32:45 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 14:40:13 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_args
     pthread_mutex_t ss;
     sem_t           *ss_sem;
     sem_t           *fork_sem;
+    sem_t           *sem;
 }               t_args;
 
 typedef struct  s_phl
@@ -55,10 +56,11 @@ typedef struct  s_phl
     sem_t           *mutex_sem;
     pthread_mutex_t mutex1;
     sem_t           *mutex1_sem;
-    pthread_t       thrd;
-    pthread_t       must_eat;
     t_args          *args;
+    pthread_t       thrd;
+    pthread_t       thrd1;
     int             num;
+    int             index;
     pid_t           pid;
     struct timeval  current_time;
     struct timeval  start_time;
