@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 02:57:45 by amine             #+#    #+#             */
-/*   Updated: 2021/05/09 14:50:25 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 15:28:49 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	start_eat(t_phl *phl, int right)
 	print_action(phl, 2);
 	gettimeofday(&phl->start_time, NULL);
 	usleep(phl->args->time_to_eat * 1000);
-	if (phl->index == phl->args->time_must_eat)
-	{
+	// if (phl->index == phl->args->time_must_eat)
+	// {
 		sem_post(phl->args->sem);
-	}
+	// }
 	sem_post(phl->mutex_sem);
 	sem_post(phl->args->fork_sem);
 	sem_post(phl->args->fork_sem);

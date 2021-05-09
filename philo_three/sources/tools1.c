@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 03:12:43 by amine             #+#    #+#             */
-/*   Updated: 2021/05/09 15:08:01 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 15:29:18 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	*check_count_eat(void *data)
 	{
 		sem_wait(phl->args->sem);
 		i++;
-		if (i == phl->args->time_must_eat)
+		if (i == (phl->args->time_must_eat * phl->args->number_of_philosopher))
 		{
 			sem_wait(phl->args->print_sem);
 			printf("DONE\n");
