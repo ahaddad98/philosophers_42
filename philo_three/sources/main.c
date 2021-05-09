@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 17:45:35 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:47:31 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	create_threads(t_phl *phl, t_args *args)
 	sem_wait(phl->args->ss_sem);
 }
 
-void	ft_free()
+void	ft_free(void)
 {
 	int		i;
 
