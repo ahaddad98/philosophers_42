@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/09 17:23:38 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:42:55 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,6 @@ void	*check_die(void *data)
 		sem_post(phl->mutex_sem);
 		usleep(1000);
 	}
-	return (NULL);
-}
-
-void	*amine(char *msg, t_phl *phl)
-{
-	sem_wait(phl->args->die_sem);
-	printf("DONE\n");
-	sem_post(phl->args->ss_sem);
 	return (NULL);
 }
 

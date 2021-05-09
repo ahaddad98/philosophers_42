@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 17:28:16 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:45:35 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	create_threads(t_phl *phl, t_args *args)
 
 	i = -1;
 	init_thread(args, &phl);
-	init_args(args, phl);
+	init_args2(phl);
 	sem_unlink("/file4");
 	phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1);
 	if (sem_wait(phl->args->ss_sem))
@@ -78,7 +78,7 @@ void	create_threads(t_phl *phl, t_args *args)
 	sem_wait(phl->args->ss_sem);
 }
 
-void	ft_free(t_phl *phl)
+void	ft_free()
 {
 	int		i;
 
@@ -92,16 +92,14 @@ void	ft_free(t_phl *phl)
 
 int	main(int ac, char **av)
 {
-	int		i;
-	int		j;
 	t_phl	phl;
 	t_args	args;
 
-	if (ac >= 5 && !check_args(av, ac) && ac < 7)
+	if (ac >= 5 && !check_args(av) && ac < 7)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
-		ft_free(&phl);
+		ft_free();
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");

@@ -49,7 +49,7 @@ OBJ2= $(addprefix $(OBJ_PATH2)/,$(OBJ_NAME2))
 SRC2= $(addprefix $(SRC_PATH2)/,$(SRC_NAME2))
 HDR2= $(addprefix $(HDR_PATH)/,$(HDR_NAME))
 
-# FLAGS= -Wall -Wextra -Werror
+FLAGS= -Wall -Wextra -Werror
 H_FLAG= -I $(HDR_PATH)
 
 COMP= gcc

@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 03:46:24 by amine             #+#    #+#             */
-/*   Updated: 2021/05/09 15:09:10 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:44:57 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ long long	ft_atoi_loong(char *str)
 	return (ret * sign);
 }
 
-void	init_args(t_args *args, t_phl *phl)
+int	init_args2(t_phl *phl)
 {
 	int		i;
 
@@ -93,4 +93,5 @@ void	init_args(t_args *args, t_phl *phl)
 	phl->args->die_sem = sem_open("/file2", O_CREAT, 0777, 1);
 	phl->args->print_sem = sem_open("/file3", O_CREAT, 0777, 1);
 	phl->args->sem = sem_open("/file6", O_CREAT, 0777, 0);
+	return (0);
 }

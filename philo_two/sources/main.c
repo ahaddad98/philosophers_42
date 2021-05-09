@@ -6,13 +6,13 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 16:54:45 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:40:59 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philosopher.h"
 
-void	init_args(t_args *args, t_phl *phl)
+int	init_args2(t_phl *phl)
 {
 	int		i;
 
@@ -24,6 +24,7 @@ void	init_args(t_args *args, t_phl *phl)
 			phl->args->number_of_philosopher);
 	phl->args->die_sem = sem_open("/file2", O_CREAT, 0777, 1);
 	phl->args->print_sem = sem_open("/file3", O_CREAT, 0777, 1);
+	return (0);
 }
 
 int	init_thread(t_args *args, t_phl **phl)
@@ -56,7 +57,7 @@ void	create_threads(t_phl *phl, t_args *args)
 	i = -1;
 	if (!(init_thread(args, &phl)))
 		return ;
-	init_args(args, phl);
+	init_args2(phl);
 	sem_unlink("/file4");
 	phl->args->ss_sem = sem_open("/file4", O_CREAT | O_EXCL, 0777, 1);
 	if (sem_wait(phl->args->ss_sem))
@@ -75,7 +76,7 @@ void	create_threads(t_phl *phl, t_args *args)
 	sem_wait(phl->args->ss_sem);
 }
 
-void	ft_free(t_phl *phl, t_args *args)
+void	ft_free(t_args *args)
 {
 	int		i;
 
@@ -89,16 +90,14 @@ void	ft_free(t_phl *phl, t_args *args)
 
 int	main(int ac, char **av)
 {
-	int		i;
-	int		j;
 	t_phl	phl;
 	t_args	args;
 
-	if (ac >= 5 && !check_args(av, ac) && ac < 7)
+	if (ac >= 5 && !check_args(av) && ac < 7)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
-		ft_free(&phl, &args);
+		ft_free(&args);
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");

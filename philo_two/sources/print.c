@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 03:05:22 by amine             #+#    #+#             */
-/*   Updated: 2021/05/09 16:56:21 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:35:20 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	*check_die(void *data)
 	return (NULL);
 }
 
-void	*amine(char *msg, t_phl *phl)
+void	*ret(t_phl *phl)
 {
 	sem_wait(phl->args->die_sem);
 	printf("DONE\n");
@@ -105,7 +105,7 @@ void	*action(void *data)
 			if (k == 2)
 				break ;
 			if (k == 1)
-				return (amine(NULL, phl));
+				return (ret(phl));
 		}
 		else
 			get_fork(phl);

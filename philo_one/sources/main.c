@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 16:40:04 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:32:33 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	create_threads(t_phl *phl, t_args *args)
 	return ;
 }
 
-void	ft_free(t_phl *phl, t_args *args)
+void	ft_free(t_args *args)
 {
 	int	i;
 
@@ -99,16 +99,14 @@ void	ft_free(t_phl *phl, t_args *args)
 
 int	main(int ac, char **av)
 {
-	int			i;
-	int			j;
 	t_phl		phl;
 	t_args		args;
 
-	if (ac >= 5 && !check_args(av, ac) && ac < 7)
+	if (ac >= 5 && !check_args(av) && ac < 7)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
-		ft_free(&phl, &args);
+		ft_free(&args);
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");

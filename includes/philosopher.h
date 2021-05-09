@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 16:31:17 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:40:09 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_phl
 	struct timeval	end_time;
 }				t_phl;
 
-int				check_args(char **av, int ac);
+int				check_args(char **av);
 long long		ft_atoi_loong(char *str);
 int				ft_atoi(const char *str);
 int				start_eat(t_phl *phl, int right);
@@ -81,6 +81,7 @@ char			*ft_itoa(int n);
 void			*check_count_eat(void *data);
 void			init_args(t_args *args, t_phl *phl);
 int				init_args1(t_args *args, t_phl *phl);
+int				init_args2(t_phl *phl);
 void			cree_thread(t_phl *phl, t_args *args);
 
 #endif

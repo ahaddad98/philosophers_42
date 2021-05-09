@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amine <amine@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 16:04:41 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/06 17:23:27 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/09 17:37:53 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_number(char *str)
 	return (0);
 }
 
-int	check_args(char **av, int ac)
+int	check_args(char **av)
 {
 	int		i;
 
