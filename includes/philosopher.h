@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:22:34 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 17:40:09 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/10 14:03:28 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/time.h>
 # include <semaphore.h>
 # include <fcntl.h> 
+# include <signal.h>
 # define EAT 1
 # define SLEEP 2
 # define THINK 3
@@ -46,6 +47,7 @@ typedef struct s_args
 	sem_t			*ss_sem;
 	sem_t			*fork_sem;
 	sem_t			*sem;
+	pid_t			*pid_to_kill;
 }				t_args;
 
 typedef struct s_phl

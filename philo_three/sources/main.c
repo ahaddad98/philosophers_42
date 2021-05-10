@@ -6,7 +6,7 @@
 /*   By: ahaddad <ahaddad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 15:43:24 by ahaddad           #+#    #+#             */
-/*   Updated: 2021/05/09 17:47:31 by ahaddad          ###   ########.fr       */
+/*   Updated: 2021/05/10 14:04:00 by ahaddad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	create_process(t_phl *phl, t_args *args)
 	int		i;
 
 	i = -1;
+	args->pid_to_kill = malloc(sizeof(pid_t) * args->number_of_philosopher);
 	while (++i < args->number_of_philosopher)
 	{
 		phl[i].pid = fork();
@@ -48,6 +49,7 @@ void	create_process(t_phl *phl, t_args *args)
 			action_philo_3(&phl[i]);
 			exit(0);
 		}
+		args->pid_to_kill[i] = phl[i].pid;
 		usleep(100);
 	}
 }
@@ -78,7 +80,7 @@ void	create_threads(t_phl *phl, t_args *args)
 	sem_wait(phl->args->ss_sem);
 }
 
-void	ft_free(void)
+void	ft_free(t_args *args)
 {
 	int		i;
 
@@ -88,6 +90,11 @@ void	ft_free(void)
 	sem_unlink("/file4");
 	sem_unlink("/file3");
 	sem_unlink("/file6");
+	while (i < args->number_of_philosopher)
+	{
+		kill(args->pid_to_kill[i], 9);
+		i++;
+	}
 }
 
 int	main(int ac, char **av)
@@ -99,7 +106,7 @@ int	main(int ac, char **av)
 	{
 		get_args(av, &args);
 		create_threads(&phl, &args);
-		ft_free();
+		ft_free(&args);
 	}
 	else
 		printf("ERROR IN PARAMETRES\n");
